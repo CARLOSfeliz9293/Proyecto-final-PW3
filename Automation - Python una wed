@@ -1,0 +1,2235 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title -FinalCodeFirst</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Images/BackStyle.css" rel="stylesheet" />
+</head>
+<body>
+
+
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" >
+
+        @Html.ActionLink("FinalCodeFirst", "Index", "Home",
+         new { area = "" }, new { @class = "navbar-brand" })
+
+        <div class="collapse navbar-collapse">
+           <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    @Html.ActionLink("Home", "Home", "Home", "Mantenimiento",
+                     new { @class = "nav-link" })
+                </li>
+
+                <li class="nav-item">
+                    @Html.ActionLink("Modulo de Mantenimiento", "ModuloMantenimiento", "Home","Mantenimiento",
+                     new { @class = "nav-link" })
+                </li>
+
+                <li class="nav-item">
+                    @Html.ActionLink("Modulo de Procesos", "ModuloProcesos", "Home", "Mantenimiento",
+                     new { @class = "nav-link" })
+                </li>
+
+                <li class="nav-item">
+                    @Html.ActionLink("Modulo de Informes", "ModuloInforme", "Home", "Mantenimiento",
+                     new { @class = "nav-link" })
+                </li>
+           
+            </ul>
+        </div>
+    </nav>
+
+
+
+    <br />
+    <br />
+
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Mi aplicación ASP.NET</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+//Este stylo sera para los botones de busqueda
+
+body {
+  background-image: url('rime.png');
+}
+
+h1{
+    text-align: center;
+    padding-top: 190px; 
+    color:gray;
+}
+
+h4 {
+    text-align: center;
+    padding-top: 30px;
+    color: #FFBF00;
+}
+
+h5 {
+    text-align: center;
+    padding-top: 10px;
+    color: #FFBF00;
+}
+.SB:hover > .ST
+{
+    width:240px;
+    padding:0 6px;
+}
+
+.SB:hover > .Sbt
+{
+  background:white;
+}
+
+.SB {
+    position: absolute;
+    top: 60%;
+    left: 60%;
+    transform: translate(-50%,-50%);
+    background: #2f3640;
+    height: 50px;
+    border-radius: 40px;
+    padding-bottom: 3px;
+    padding-top:5px;
+    padding-right:5px;
+    padding-left:5px;
+}
+.Sbt {
+
+  
+    color: #e84118;
+    float: right;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #2f3640;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.4s;
+}
+.ST
+{
+    border:none;
+    background:none;
+    outline:none;
+    float:left;
+    padding:0;
+    color:white;
+    font-size:16px;
+    transition:0.4s;
+    line-height:40px;
+    width:0px;
+}
+
+ <div class="SB">
+        <input type="text" class="ST" placeholder="Buscar..." name="" />
+        <a class="Sbt" href="#">
+            <i class="fas fa-search"></i>
+        </a>
+    </div>
+
+<connectionStrings>
+    <add name="BContext"  <!------- este es Nombre de la cadena de coneccion -->
+     connectionString="Data Source=LAPTOP-5PJ38VSD; <!--------aqui va el nombre del equipo o servidor de la base de datos -->
+     Initial Catalog=CodeFirst;   <!-------- aqui va el nombre de la base de datos -->
+     Integrated Security=True;" 
+     providerName="System.Data.SqlClient" />  <!------- nombre del cleinte SQL -->
+  </connectionStrings>  
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace FinalCodeFirst.Models
+{
+    public class CalculoNomina
+    {
+        public int id { get; set; }
+        public String Empleado { get; set; }
+        public String Año { get; set; }
+        public String Mes { get; set; }
+        public Nullable<decimal> MontoTotal { get; set; }
+    }
+}
+@model FinalCodeFirst.Models.CalculoNomina
+
+@{
+    /**/
+
+    ViewBag.Title = "CalculoNomina";
+}
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>CalculoNomina</h4>
+    <br />
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <br />
+    <div class="form-group">
+        @Html.Label("Nombre de empleado", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Empleado, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Empleado, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Año de su nomina", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Año, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Año, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Mes de su nomina", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Mes, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Mes, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("El Monto Total de su Nomina", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.MontoTotal, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.MontoTotal, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Eviar Informacion" class="btn btn-outline-success" />
+            <br />
+            @Html.ActionLink("Listas de Nominas", "TablaNomina", "Procesos","Home",
+            new { @class = "btn btn-outline-success" })
+        </div>
+
+    </div>
+
+</div>
+
+
+}
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace FinalCodeFirst.Models
+{
+	public class Cargo
+	{
+		public int id { get; set; }
+		public String NombreCargo { get; set; }
+	}
+}
+
+@model FinalCodeFirst.Models.Cargo
+
+@{
+    ViewBag.Title = "Cargo";
+}
+
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Cargo</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("Nombre Cargo", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NombreCargo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NombreCargo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Eviar Informacion" class="btn btn-outline-success" />
+                <br/>
+                @Html.ActionLink("Listado de Cargos", "TablaCargos", "Mantenimiento","Home",
+                 new { @class = "btn btn-outline-success" })
+            </div>
+        </div>
+    </div>
+}
+
+
+
+-----------------------------------------------------------------------------
+--------------------------------- ASP CODE FIRST -----------------------
+-----------------------------------------------------------------------------
+                                       |
+                                       v
+      <div class="form-group">
+            @Html.Label("Fecha de Ingreso", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EnumDropDownListFor(a => a.Dia,
+                "Dia", new { @class = "form-control" })
+
+                @Html.EnumDropDownListFor(a => a.Mes,
+                "Mes", new { @class = "form-control" })
+
+                @Html.EnumDropDownListFor(a => a.A�o,
+                "A�o", new { @class = "form-control" })
+
+                @Html.EnumDropDownListFor(a => a.Estado,
+                "Estado del Empleado", new { @class = "form-control" })
+            </div>
+        </div>
+
+*****************************************************************************
+                           ***  ACTIVAR MIGRACIONES ***
+*****************************************************************************
+ 
+                     () Se abre el nget-package console ()
+-------------------------------------------------------
+
+   update-database
+   update - database-force
+   enable-migrations
+
+
+*****************************************************************************
+                             *** DB CONTEXT ***
+*****************************************************************************
+
+    Contexto BD = new Contexto();
+ 
+    public ActionResult dbView(){
+    return View(DB.FormModels.ToList());
+     }
+    
+    [HttpGet]
+   public ActionResult Create(){
+      return View();
+     }
+
+  [HttpPost]
+public ActionResult Index(Agenda agenda)
+{
+   BD.Agendas.Add(agenda);
+   BD.SaveChanges();
+   return RedirectToAction("tablaAgenda");
+   //return View(agenda);
+}
+------------------------------------------- ---------------
+        *** Enviar los datos a la tabla ***
+------------------------------------------- ---------------
+
+public ActionResult tablaAgenda()
+{
+    return View(BD.Agendas.ToList());
+}
+-------------------------------------------------------
+******************** BUSCADOR *************************
+--------------------------------------------------------
+[HttpPost]
+public ActionResult tablaAgenda(string BuscarNombre)
+{
+  var nombreBuscado = from contacto
+		      in BD.Agendas
+		      select contacto;
+
+   nombreBuscado = nombreBuscado.Where(c => c.Nombre.Contains(BuscarNombre));
+
+    if (string.IsNullOrEmpty(BuscarNombre))
+    {
+     nombreBuscado = nombreBuscado.Where(c => c.Nombre.Contains(BuscarNombre));
+     }
+    
+     return View(nombreBuscado);
+}
+		
+
+-------------------------------------------------------------
+
+	[HttpPost]
+     public ActionResult Form(Registrar r)
+     {
+       if (ModelState.IsValid) 
+         {
+           return View("Iniciar", r);
+
+           } 
+
+       else  {
+	return View();
+       //envia los datos al modelo
+        }
+     }
+------------------------------------------------------------
+******************** Clase Contexto *************
+-------------------------------------------------------
+public class Contexto : DbContext
+{
+
+   public Contexto()
+   : base("CadenaAgenda") // NOMBRE DE LA CADENA DE CONEXION
+     { }
+
+      // CREA LA TABLA A partir de la 
+     // clase que le pasamos "<clase>"
+    // tabla agenda
+
+    public DbSet<Agenda> Agendas { get; set; }
+    // tabla eventos
+    public DbSet<Evento> Eventos { get; set; }
+	}
+---------------------------------------------------------------
+
+    using System.Data.Entity;
+    using System.Data.Entity.Infrastructure;
+    
+    public partial class dataFirstEntities : DbContext
+
+--------------------------------------------------------------
+****   /  *****
+--------------------------------------------------------------
+
+****************************************************************************
+                           *** CONNECTION-STRING **
+*****************************************************************************
+
+  <connectionStrings>
+    <add name="CadenaFinal" 
+     connectionString="Data Source = LAPTOP-5PJ38VSD; 
+     Initial Catalog= FinalCodeFirst; 
+     Integrated Security=True;" 
+     providerName="System.Data.SqlClient" />
+  </connectionStrings>  
+
+****************************************************************************
+                             *** Links Helpers ***
+*****************************************************************************
+
+1-https://www.tutorialsteacher.com/mvc/html-helpers
+2-https://desarrolloweb.com/articulos/helpers-formularios-dotnet.html
+3-https://docs.microsoft.com/es-es/dotnet/csharp
+       /programming-guide
+      /concepts/linq
+     /getting-started-with-linq
+
+*****************************************************************************
+                             *** RadioButton ***
+*****************************************************************************
+
+@using (Html.BeginForm("OperacionG", "Home", FormMethod.Post))
+{
+    <label>Tipo de Convercion</label>
+   
+    <label>Farenheith to Celcius</label>
+     @Html.RadioButton("grado", "1")
+   
+    <label>Celcius to Farenheith</label>
+     @Html.RadioButton("grado", "2")
+
+    <div class="form-group">
+        @Html.TextBoxFor(model => model.grados, 
+         new { @class = "form-control", placeholder = "# Grados" })
+      
+        @{
+            if (Model != null)
+            {
+                <div class="alert alert-primary" role="alert">
+                <label>@Model.grados</label>
+                </div>
+            }
+
+        }
+
+    </div>
+
+**************************************************************************
+    public ActionResult OperacionG(UnitConverterModel ucm)
+	{
+            if (Request.Form["grado"] != null)
+	    {
+	        String selectedGrado = Request.Form["grado"].ToString();
+                 if (selectedGrado == "1")
+		{
+		   ucm.Conversion(ucm.grados);
+		   return UnitConverter(ucm);
+		}
+		   
+                 if (selectedGrado == "2")
+		{
+		   ucm.Conversion2(ucm.grados);
+		   return UnitConverter(ucm);
+		}
+
+	      }
+                   return UnitConverter(ucm);
+	}
+
+****************************************************************************
+                         *** RadioButton 2 ***
+                              
+                              Validacion
+
+****************************************************************************
+***Vista Formulario***
+----------------------
+ <div> <!--EstadoCivil-->
+        <h6 class=" alert alert-light">Estado Civil</h6>
+
+        <div class="form-row col-md-4">
+         @Html.Label("Casado", htmlAttributes:
+         new { @class = "control-label col-md-6" })
+         @Html.RadioButton("EstadoCivil", "1") <!--Casado-->
+          </div>
+
+         <div class="form-row col-md-4">
+          @Html.Label("Soltero", htmlAttributes:
+          new { @class = "control-label col-md-6" })
+          @Html.RadioButton("EstadoCivil", "2") <!--Soltero-->
+         </div>
+
+         <div class="form-row col-md-4">
+          @Html.Label("Union Libre", htmlAttributes:
+          new { @class = "control-label col-md-6" })
+          @Html.RadioButton("EstadoCivil", "3") <!--UnionLibre-->
+         </div>
+
+         <div class="form-row col-md-4">
+          @Html.Label("Viudo/a", htmlAttributes:
+          new { @class = "control-label col-md-6" })
+          @Html.RadioButton("EstadoCivil", "4") <!--Viudo-->
+         </div>
+        </div>  <!--EstadoCivil-->
+-------------
+***Modelo***
+------------
+   String estadocivil;
+   public String EstadoCivil
+    {
+	get
+	{
+	   return estadocivil;
+	}
+	set
+	{
+	    estadocivil = value;
+	}
+     } //(Casado/Soltero/Viudo/Union Libre) (RadioButton)
+
+----------------
+***Validacion***
+----------------
+  if (Request.Form["EstadoCivil"] != null)
+{
+    String selectedRadio = Request.Form["EstadoCivil"].ToString();
+    String soltero = "Soltero"; 
+    String Casado = "Casado";
+    String UnionLibre = "Union Libre"; 
+    String Viudo = "Viudo";
+
+    if (selectedRadio == "1")
+    {
+	r.EstadoCivil = Casado;
+	}
+    if (selectedRadio == "2")
+    {
+	r.EstadoCivil = soltero;
+     }
+    if (selectedRadio == "3")
+    {
+	r.EstadoCivil = UnionLibre;
+     }
+    if (selectedRadio == "4")
+     {
+	r.EstadoCivil = Viudo;
+     }
+}
+
+
+*****************************************************************************
+                       *** Boostrap4 NavBar fixed ***
+*****************************************************************************
+
+ <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+-----------------------------------------------------------------------------
+
+ <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-warning">
+
+        @Html.ActionLink("HomeWork", "Index", "Home", 
+         new { area = "" }, new { @class = "navbar-brand" })
+
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    @Html.ActionLink("Home", "Index", "Home", 
+                     new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Events", "CreateEvents", "Home", 
+                    new { @class = "nav-link" })
+                </li>
+
+            </ul>
+            </div>
+                </nav>
+
+******************************************************************************
+                   *********    FORM EXAMPLE   ***************
+******************************************************************************
+
+<div class="card bg-light mb-3" style="max-width: 18rem;">
+  <div class="card-header">Header</div>
+  <div class="card-body">
+    <h5 class="card-title">Light card title</h5>
+    <p class="card-text">
+      Some quick example text to build on the card 
+       title and make up the bulk of the card's content.
+     </p>
+  </div>
+******************************************************************************
+               ************ Codigo AutoGenerado Example **************
+******************************************************************************
+
+ <div class="form-group">
+     @Html.LabelFor(model => model.Fecha, htmlAttributes: 
+       new { @class = "control-label col-md-4" })
+
+      <div class="col-md-10">
+        @Html.EditorFor(model => model.Fecha, 
+          new { htmlAttributes = new { @class = "form-control" } })
+
+        @Html.ValidationMessageFor(model => model.Fecha, "",
+          new { @class = "text-danger" })
+       </div>
+  </div>
+****************************************************************************
+                             *** PLACEHOLDER ****
+*****************************************************************************
+
+
+ new { htmlAttributes = new { placeholder = "Your Placeholder Text" } }
+
+***************************************************************************
+                           ***** DROPDOWN-LIST *****
+***************************************************************************
+
+<div class="form-row col-md-4">
+  @Html.DropDownList("Genero",
+   new SelectList(Enum.GetValues(typeof(Gender))),
+   "Selecciona el Genero",
+   new { @class = "form-control" })
+</div>
+
+
+***  En el MODELO  *****
+------------------------
+public String Genero { get; set; } 
+
+ public enum Gender
+       {
+	             Hombre,
+	             Mujer
+       }
+
+**** Validacion *****
+---------------------------
+
+ if (Request.Form["Genero"] != null)
+{
+     String GeneroMas = "Masculino";
+     String Generofem = "Fememino";
+     String selectedDropDownList = Request.Form["Genero"].ToString();
+     if(selectedDropDownList == "Hombre")
+     {
+	r.Genero = GeneroMas;
+     }
+     if (selectedDropDownList == "Mujer")
+     {
+	r.Genero = Generofem;
+     }
+}
+
+** Vista **
+---------------------------
+
+  <div class="form-row col-md-5">
+            @Html.LabelFor(model => model.Genero, htmlAttributes:
+             new { @class = "control-label col-md-5" })
+            @Model.Genero
+   </div>
+
+
+******************************************************************************
+************************* OTRA FORMA DE HACERLO *******************************
+******************************************************************************
+
+****En el Modelo*****
+---------------------
+
+ public DatosGenero Genero { get; set; }
+
+  public enum DatosGenero
+    {
+        Masculino,
+        Femenino
+            
+    }
+
+*********En la Vista del formulario**********
+----------------------------------------------
+  <div>
+   @Html.LabelForModel("Genero")
+   @Html.EnumDropDownListFor(a => a.Genero, 
+   "Seleccione su genero", new { @class = "form-control" })
+  </div>
+
+****** En la vista de mostrar los datos************
+----------------------------------------------------
+
+<div>
+    Genero: @Model.Genero
+</div>
+
+*****************************************************************************
+                       *** Persistencia de Datos ***
+*****************************************************************************
+
+
+ <div>
+
+   <label>Mi Nombre es:@Model.Nombre</label>
+   </br>
+   <label>Mi Edad es: @Model.Edad</label>
+   </br>
+   <label>Mi Carrera es:@Model.Carrera</label>
+   </br>
+   <label>Mi Cuatrimestre es el:@Model.Cuatrimestre</label>
+   </br>
+       
+ </div>
+
+***************************************************************************
+                           ***  NODOS LOGICA ***
+*****************************************************************************
+
+private int dato;
+private node siguiente;
+
+ public int Dato
+   {
+	get
+	{
+	   return dato;
+	}
+	set
+	{
+	   dato = value;
+	}
+      }
+     
+  public node Siguiente
+   {
+      get
+      {
+	return siguiente;
+      }
+	set 
+        {
+	 siguiente = value;
+	 }
+    }
+****************************************************************************
+                       *** ValidarCheckBox ***
+***************************************************************************
+
+String SelectedCheckBox1 = Request.Form["Guitarra"].ToString();
+String SelectedCheckBox2 = Request.Form["Pintar"].ToString();
+String SelectedCheckBox3 = Request.Form["Dibujar"].ToString();
+String SelectedCheckBox4 = Request.Form["Nadar"].ToString();
+String F = "false";
+		
+  if(SelectedCheckBox1 != F)
+  {
+     String Guitar = " Guitarra";
+     r.Hobbys = r.Hobbys+Guitar;
+  }
+  if(SelectedCheckBox2 != F)
+  {
+     String Paint = " Pintar";
+     r.Hobbys = r.Hobbys+Paint;
+  }
+  if(SelectedCheckBox3 != F)
+  {
+     String Dibujar = " Dibujar";
+     r.Hobbys = r.Hobbys + Dibujar;
+   }
+  if(SelectedCheckBox4 != F)
+  {
+     String Nadar = " Nadar";
+     r.Hobbys = r.Hobbys + Nadar;
+  }
+
+***************************************** *********************************
+                        ****** Validar CHECKBOX 2 ******
+***************************************** *********************************
+
+***************** formulario ***********************
+----------------------------------------------------
+     <div>
+            @Html.Label("Pasatiempo(s)")
+            @Html.LabelForModel("Leer")
+            @Html.CheckBoxFor(a => a.Hobby1)
+            @Html.LabelForModel("Programar")
+            @Html.CheckBoxFor(a => a.Hobby2)
+            @Html.LabelForModel("Baloncesto")
+            @Html.CheckBoxFor(a => a.Hobby3)
+
+        </div>
+
+*************** en el Modelo  *************************
+-------------------------------------------------------
+
+        //Declaro cada hobby como una propiedad booleana
+        //Leer
+        public bool Hobby1 { get; set; }
+        //Programar
+        public bool Hobby2 { get; set; }
+        //Baloncesto
+        public bool Hobby3 { get; set; }
+
+/// en el controlador se mandan los datos a la vista
+/// mostrar datos y se valida el estado del modelo
+
+
+************** en la vista de mostrar los datos *****************
+-----------------------------------------------------------------
+
+<div>
+    Pasatiempos: @if (Model.Hobby1 == true) { <label>"Leer"</label> }
+                 @if (Model.Hobby2 == true) { <label>"Programar"</label> }
+                 @if (Model.Hobby3 == true) { <label>"Baloncesto"</label> }
+</div>
+
+
+***************************************** *********************************
+                     ****** Validar CHECKBOX 3  ******
+                            ** Con Array **
+***************************************** *********************************
+
+Modelo--
+----------------------------------
+
+   public string[] Hobbies { get; set; }
+
+------------------
+Formulario--
+------------------
+@Html.Label("Pasatiempo(s)")
+@Html.CheckBox("Hobbies[]", false, new { @value = "Leer" }) Leer
+@Html.CheckBox("Hobbies[]", false, new { @value = "Programar" }) Programar
+@Html.CheckBox("Hobbies[]", false, new { @value = "Baloncesto" }) Baloncesto
+
+-----------------------------
+Vista que muestra los datos ---
+-----------------------------
+<div>
+     @Html.Label("Pasatiempo(s)")
+     @for (int i = 0; i < Model.Hobbies.Length; i++)
+    {
+        if (Model.Hobbies[i] != "false")
+        {
+            @Model.Hobbies[i]
+            <span> </span>
+        }
+    }
+</div>
+
+
+****************************************************************************
+                                TOTALIZAR y Actualizar
+****************************************************************************
+public ActionResult Totalizar()
+{
+  ViewBag.TotalSalario = db.Linq.Sum(a => a.salario);
+  ViewBag.TotalEmpleados = db.Linq.Count();
+
+  var query = (from a in db.Linq
+               where a.nombre == "Juan"
+               select a).First();
+
+   query.salario = 5;
+
+
+   db.SaveChanges();
+    return View();
+}
+
+-----------------------------------------------------------------------------
+<h2>Totalizar</h2>
+Total de la nomina es: @ViewBag.TotalSalario <br />
+Total de empleados es: @ViewBag.TotalEmpleados
+
+
+*****************************************************************************
+                        *** Llenar DropdownList ***
+                              **Con Datos**
+*****************************************************************************
+public ActionResult LlenarCombo()
+{
+  var empleados = db.Linq.ToList();
+
+  var listaEmpleados = new SelectList(empleados,"Id","Salario");
+  ViewBag.Empleados = listaEmpleados;
+
+  return View();
+        }
+
+-----------------------------------------------------------------------------
+
+  <h2>LlenarCombo</h2>
+  @Html.DropDownList("A",ViewBag.Empleados as SelectList,"Seleccione" )
+
+
+
+******************************************************************************
+                        ** Consultas LINQ Ejemplos
+*****************************************************************************
+[HttpPost]
+public ActionResult tablaAgenda(string BuscarNombre)
+{
+   var nombreBuscado = from contacto
+			in BD.Agendas
+			select contacto;
+
+       nombreBuscado = 
+       nombreBuscado.Where
+       (c => c.Nombre.Contains(BuscarNombre));
+   
+   if (string.IsNullOrEmpty(BuscarNombre))
+   {
+	nombreBuscado = 
+        nombreBuscado.Where
+        (c => c.Nombre.Contains(BuscarNombre));
+
+    }
+
+   return View(nombreBuscado);
+}
+
+
+
+*****************************************************************************
+       **** CONSULTAS LINK****
+*****************************************************************************
+public ActionResult Activo()
+ {
+      var query = (from a in db.Empleados
+                   where a.Estatus == "Activo"
+                   select a).Include(e => e.Cargos)
+                   .Include(k => k.Departamentos);
+
+            return View(query.ToList());
+ }
+
+public ActionResult Inactivo()
+{
+     var query = (from a in db.Empleados
+                  where a.Estatus == "Inactivo"
+                  select a).Include(e => e.Cargos)
+                  .Include(k => k.Departamentos);
+
+            return View(query.ToList());
+  }
+
+var query4 = (from a in BD.Empleados
+              where a.Estado == "Activo"
+               select a where a.NombreEmpleado == DropDownList).First();
+
+
+***************************************************************************
+
+*************************************************************************
+var query2 = (from a in BD.Empleados
+	       where a.Estado == "Activo"
+		select a).First();
+
+var query3 = (from a in BD.Empleados
+		where a.NombreEmpleado == DropDownList
+		select a).First();
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace FinalCodeFirst.Models
+{
+	public class Departamento
+	{
+		public int id { get; set; }
+		public int CodigoDepartamento { get; set; }
+		public String NombreDepartamento { get; set; }
+
+	}
+}
+
+@model FinalCodeFirst.Models.Departamento
+
+@{
+                /**/
+
+                ViewBag.Title = "Departamento";
+}
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Departamento</h4>
+        <br />
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <br />
+        <div class="form-group">
+            @Html.Label("Codigo Departamento", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CodigoDepartamento, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CodigoDepartamento, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Nombre Departamento", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NombreDepartamento, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NombreDepartamento, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Eviar Informacion" class="btn btn-outline-success" />
+                <br/>
+                @Html.ActionLink("Lista de Departamentos", "TablaDepartamento", "Mantenimiento","Home",
+                new { @class = "btn btn-outline-success" })
+            </div>
+            
+        </div>
+
+    </div>
+
+
+}
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
+
+namespace FinalCodeFirst.Models
+{
+	public class Empleado
+	{
+		public  int id  { get; set; }
+		[Required(ErrorMessage = "Obligatorio")]
+		public String NombreEmpleado { get; set; }
+
+		[Required(ErrorMessage = "Obligatorio")]
+		public String ApellidoEmpleado { get; set; }
+
+		[Required(ErrorMessage = "Obligatorio")]
+		public long Telefono { get; set; }
+
+		[Required(ErrorMessage = "Obligatorio")]
+		public String Departamento { get; set; }
+
+		[Required(ErrorMessage = "Obligatorio")]
+		public String Cargo { get; set; }
+
+		[Required(ErrorMessage = "Obligatorio")]
+		public long Salario { get; set; }
+
+		[Required(ErrorMessage = "Obligatorio")]
+		public DateTime Fecha { get; set; }
+
+		[Required(ErrorMessage = "Obligatorio")]
+		public EstadoEmpleado Estado { get; set; }
+
+		public enum EstadoEmpleado
+		{
+			 Activo,
+			 Inactivo
+
+		}
+
+		
+
+	}
+}
+
+@model FinalCodeFirst.Models.Empleado
+
+@{
+    ViewBag.Title = "Empleado";
+}
+
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Empleado</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("Nombre Empleado", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NombreEmpleado, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NombreEmpleado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Apellido", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ApellidoEmpleado, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ApellidoEmpleado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Telefono, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Departamento, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Departamento, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Departamento, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Cargo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Cargo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Cargo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+      
+        <div class="form-group">
+            @Html.Label("Fecha de Ingreso", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="date" name ="Fecha"  class="form-control"/>
+                <br/>
+                @Html.EnumDropDownListFor(a => a.Estado,
+                "Estado del Empleado", new { @class = "form-control" })
+            </div>
+
+        </div>
+       
+        <div class="form-group">
+            @Html.LabelFor(model => model.Salario, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Salario, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Salario, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Enviar" class="btn btn-outline-success" />
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@{
+    ViewBag.Title = "Enviado";
+}
+
+<h2>Enviado</h2>
+
+<h3 class="bg-success">Los datos Fueron Guardados Exitosamente</h3>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace FinalCodeFirst.Controllers
+{
+	public class HomeController : Controller
+	{
+		public ActionResult Index()
+		{
+			return View();
+		}
+
+		public ActionResult Home()
+		{
+
+			return View();
+		}
+		public ActionResult ModuloMantenimiento ()
+		{
+
+			return View();
+		}
+		public ActionResult ModuloProcesos()
+		{
+			return View();
+		}
+
+		public ActionResult ModuloInforme()
+		{
+			return View();
+		}
+
+
+	}
+}
+
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+
+    <link href="~/Images/BackStyle.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    
+
+
+    <title>Index</title>
+</head>
+<body class="fondo">
+    <h1 class="tx">Welcome To Our Final Proyect</h1>
+
+         @Html.ActionLink("Ingresar","Home","Home", new { @class = "btn btn-outline-dark btn-lg btn-block" })
+
+        <h4>Made By</h4>
+        <h5>Gabriel Jimenez - 2015-2941</h5>
+        <h5>Ivan Alejandro Polanco - 2017-4498</h5>
+
+</body>
+
+</html>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace FinalCodeFirst.Models
+{
+    public class Licencia
+    {
+        public int id { get; set; }
+        public String Empleado { get; set; }
+        public Nullable<System.DateTime> FechaInicio { get; set; }
+        public Nullable<System.DateTime> FechaFinal { get; set; }
+        public String Comentario { get; set; }
+        public String Motivo { get; set; }
+
+    }
+}
+@model FinalCodeFirst.Models.Licencia
+
+@{
+    /**/
+
+    ViewBag.Title = "Licencia";
+}
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Licencia</h4>
+    <br />
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <br />
+    <div class="form-group">
+        @Html.Label("Nombre de empleado", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Empleado, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Empleado, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Inicio de su Licencia", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.FechaInicio, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.FechaInicio, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Final de su Licencia", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.FechaFinal, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.FechaFinal, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Comentario en la Licencia", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Comentario, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Comentario, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Motivo de la Licencia", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Motivo, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Motivo, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Eviar Informacion" class="btn btn-outline-success" />
+            <br />
+            @Html.ActionLink("Listas de Licencias", "TablaLicencia", "Procesos","Home",
+            new { @class = "btn btn-outline-success" })
+        </div>
+
+    </div>
+
+</div>
+
+
+}
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.Mvc;
+using FinalCodeFirst.Models;
+
+namespace FinalCodeFirst.Controllers
+{
+    public class MantenimientoController : Controller
+    {
+		// GET: Mantenimiento
+
+		Contexto BD = new Contexto();
+
+
+		// *****************************************************************
+		//                   Modulo de Mantenimiento
+		// ******************************************************************
+
+
+
+		[HttpGet]
+		public ActionResult Departamento()
+		{
+			return View();
+		}
+		[HttpPost]
+		public ActionResult Departamento(Departamento dep)
+		{
+
+			BD.Departamentos.Add(dep);
+			BD.SaveChanges();
+			return RedirectToAction("TablaDepartamento");		
+
+		}
+
+		public ActionResult TablaDepartamento()
+		{
+			return View(BD.Departamentos.ToList());
+		}
+
+		[HttpGet]
+		public ActionResult Cargo()
+		{
+			return View();
+		}
+		[HttpPost]
+		public ActionResult Cargo(Cargo c)
+		{
+
+			BD.Cargos.Add(c);
+			BD.SaveChanges();
+			return RedirectToAction("TablaCargos");
+		}
+
+		public ActionResult TablaCargos()
+		{
+			return View(BD.Cargos.ToList());
+		}
+		
+		
+		[HttpGet]
+		public ActionResult Empleado()
+		{
+			return View();
+		}
+		[HttpPost]
+		public ActionResult Empleado(Empleado emp)
+		{
+
+			BD.Empleados.Add(emp);
+			BD.SaveChanges();
+			return RedirectToAction("Enviado");
+		}
+		public ActionResult Enviado()
+		{
+			return View();
+		}
+
+		
+	}
+}
+
+@{
+    ViewBag.Title = "Modulo de Informe";
+}
+
+<h2>Modulo de Informe</h2>
+
+
+<br />
+@Html.Label("Pulsa para ir a una accion", new { @class = "control-label col-md-5" })
+
+<a class="btn btn-outline-info btn-lg btn-block" href="Home/Home" role="button">Informe de Nomina</a>
+<br />
+<a class="btn btn-outline-success btn-lg btn-block" href="Home/Home" role="button">Informe de Empleados Activos</a>
+<br />
+<a class="btn btn-outline-danger btn-lg btn-block" href="Home/Home" role="button">Informe de Empleados Inactivos</a>
+<br />
+<a class="btn btn-outline-success btn-lg btn-block" href="Home/Home" role="button">Informe de Departamentos</a>
+<br />
+<a class="btn btn-outline-dark btn-lg btn-block" href="Home/Home" role="button">Informe de Cargos</a>
+<br />
+<a class="btn btn-outline-warning btn-lg btn-block" href="Home/Home" role="button">Informe de Entrada de Empleados por Mes</a>
+<br />
+<a class="btn btn-outline-danger btn-lg btn-block" href="Home/Home" role="button">Informe de Salida de Empleados por Mes</a>
+<br />
+<a class="btn btn-outline-primary btn-lg btn-block" href="Home/Home" role="button">Historial de Permisos</a>
+
+
+@{
+                /**/
+
+                ViewBag.Title = "Modulo de Mantenimiento";
+}
+
+<h2>Modulo de Mantenimiento</h2>
+<br />
+@Html.Label("Pulsa para ir a una accion", new { @class = "control-label col-md-5" })
+
+
+@Html.ActionLink("Agregar Empleado", "Home", "Home",
+new { @class = "btn btn-outline-info btn-lg btn-block" })
+<br />
+
+@Html.ActionLink("Agregar Departamentos", "Departamento", "Mantenimiento","Home",
+new { @class = "btn btn-outline-success btn-lg btn-block" })
+<br />
+@Html.ActionLink("Agregar Cargo", "Cargo", "Mantenimiento", "Home" ,
+new { @class = "btn btn-outline-warning btn-lg btn-block" })
+
+
+@{
+    ViewBag.Title = "Modulo de Procesos";
+}
+
+<h2>Modulo de Procesos</h2>
+
+<br />
+@Html.Label("Pulsa para ir a una accion", new { @class = "control-label col-md-5" })
+
+<a class="btn btn-outline-info btn-lg btn-block" href="Home/Home" role="button">Calculo de Nomina</a>
+<br />
+<a class="btn btn-outline-danger btn-lg btn-block" href="Home/Home" role="button">Salida de Empleados</a>
+<br />
+<a class="btn btn-outline-warning btn-lg btn-block" href="Home/Home" role="button">Vacaciones</a>
+<br/>
+<a class="btn btn-outline-success btn-lg btn-block" href="Home/Home" role="button">Permisos</a>
+<br />
+<a class="btn btn-outline-primary btn-lg btn-block" href="Home/Home" role="button">Licencias</a>
+
+
+@{
+    /**/
+
+    /**/
+
+    /**/
+
+    /**/
+
+    ViewBag.Title = "Modulo de Procesos";
+}
+
+<h2>Modulo de Procesos</h2>
+
+<br />
+@Html.Label("Pulsa para ir a una accion", new { @class = "control-label col-md-5" })
+
+@Html.ActionLink("Calculo de Nomina", "Home", "Home",
+new { @class = "btn btn-outline-info btn-lg btn-block" })
+<br />
+@Html.ActionLink("Salida de Empleados", "Home", "Home",
+new { @class = "btn btn-outline-danger btn-lg btn-block" })
+<br />
+@Html.ActionLink("Vacaciones", "Home", "Home",
+new { @class = "btn btn-outline-warning btn-lg btn-block" })
+<br />
+@Html.ActionLink("Permisos", "Home", "Home",
+new { @class = "btn btn-outline-success btn-lg btn-block" })
+<br />
+@Html.ActionLink("Licencias", "Home", "Home",
+new { @class = "btn btn-outline-primary btn-lg btn-block" })
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace FinalCodeFirst.Models
+{
+    public class Permisos
+    {
+        public int id { get; set; }
+        public String Empleado { get; set; }
+        public Nullable<System.DateTime>FechaInicio { get; set; }
+        public Nullable<System.DateTime>FechaFinal { get; set; }
+        public String Comentarios { get; set; }
+    }
+}
+@model FinalCodeFirst.Models.Permisos
+
+@{
+    /**/
+
+    ViewBag.Title = "Permisos";
+}
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Permisos</h4>
+        <br />
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <br />
+        <div class="form-group">
+            @Html.Label("Nombre de empleado", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Empleado, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Empleado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Inicio de su Permiso", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FechaInicio, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FechaInicio, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Final de su Permiso", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FechaFinal, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FechaFinal, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Comentario en la Licencia", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Comentarios, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Comentarios, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Eviar Informacion" class="btn btn-outline-success" />
+                <br />
+                @Html.ActionLink("Listas de Permisos", "TablaPermisos", "Procesos","Home",
+                new { @class = "btn btn-outline-success" })
+            </div>
+
+        </div>
+
+    </div>
+
+
+}
+
+**********************************************************
+PROYECTO FINAL PARA LA MATERIA DE PROGRAMACION 3 - ITLA
+**********************************************************
+
+[Descripcion de los Modulos del Proyecto]
+
+
+----------------------------------- ---  Modulo de Mantenimientos ----- -------------------------------------------
+
+Este modulo consiste en crear formularios que alimenten las siguientes tablas
+
+*Empleado
+ (  id
+    Codigo Empleado
+    Nombre
+    Apellido
+    Telefono
+    Departamento
+    Cargo
+    Fecha Ingreso
+    Salario
+    Estatus Activo /Inactivo
+    )
+    
+ *Departamentos 
+ (  id
+    Codigo Departamento
+    Nombre Departamento
+ ) 
+ 
+ *Cargo
+ (  id
+    Nombre Cargo  
+ )
+    
+    
+    ----------------------------------------- Modulo Procesos ---------------------------------------------------
+    
+                       En este modulo se van a configurar algunos procesos y acciones.
+                       Vale decir que estos procesos y acciones son registrados en respectivas tablas
+                       
+    *Calculo Nomina
+    (
+   --> calcular el monto total de la nomina, sumando el salario de los empleados activos
+      y presentando el total, para que sea visto y validado por la persona encargada
+      almacenar en una tabla nominas la siguiente informacion.    <--
+      
+      Id
+      Año
+      Mes
+      Monto Total   
+    )                   
+                       
+    *Salida Empleados
+    (
+    -->   inactiva a un empleado y almacena la informacion en una tabla salidas  <--
+      
+      Empleado
+      Tipo Salida (Renuncia, Despido, Desahucio)
+      Motivo
+      Fecha Salida
+    )
+    
+    *Vacaciones
+    (  
+      --> Registra las vacaciones que tome un empleado <--
+      
+        Empleado
+        Desde (fecha de inicio de vacaciones)
+        Hasta (fecha fin de vacaciones)
+        Comentarios   
+    )
+                       
+    *Permisos  
+    (
+      --> Registra los permisos que tome un empleado <--
+    
+    Empleado
+    Desde
+    Hasta
+    Comentarios
+    
+    )  
+    *Licencias
+    (
+      --> Registra las licencias que tome un empleado <--
+    Empleado
+    Desde
+    hasta
+    Motivo
+    Comentario
+    )
+    
+                       
+************************************************** Modulo de Informes *********************************************************
+
+Nomina
+ -Con este Informe se busca visualizar todas las nominas de un Año especificado o bien visualizar
+  la correspondiente a un mes especifico.
+  
+Empleados Activos
+ -Aqui Buscamos Visualizar empleados activos de la empresa, con opcion de verlos todos, o de filtrar
+  por nombre o por departamento. (incluir ambos filtros)
+
+Empleados Inactivos
+ -Visualizar todos los empleados que han salido de la empreza
+ 
+Departamentos
+ -Listar los departamentos creados
+
+Cargos
+ -Listar los cargos creados
+ 
+Entradas de empleado por mes
+ -Visualizar las Entradas (empleados creados/ingresados) en un mes determinado por el usuario
+ 
+Salida de empleado por mes
+-Visualizar la Salida  (empleados creados/ingresados) en un mes determinado por el usuario
+
+Permisos
+-Visualizar los permisos tomados por un determinado empleado (a elegir por parte del usuario)
+                       
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace FinalCodeFirst.Models
+{
+    public class SalidaEmpleado
+    {
+        public int id { get; set; }
+        public String Empleado { get; set; }
+        public String TipoSalida { get; set; }
+        public String Motivo { get; set; }
+        public Nullable<System.DateTime> FechaSalida { get; set; }
+    }
+}
+@model FinalCodeFirst.Models.SalidaEmpleado
+
+@{
+    /**/
+
+    ViewBag.Title = "SalidaEmpleados";
+}
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>SalidaEmpleados</h4>
+        <br />
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <br />
+        <div class="form-group">
+            @Html.Label("Nombre de empleado", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Empleado, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Empleado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Tipos de Salidas", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TipoSalida, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TipoSalida, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Motivo de su Salida", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Motivo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Motivo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Comentario en la Licencia", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FechaSalida, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FechaSalida, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Eviar Informacion" class="btn btn-outline-success" />
+                <br />
+                @Html.ActionLink("Listas de Salidas de empleados", "TablaSalidaEmpleados", "Procesos","Home",
+                new { @class = "btn btn-outline-success" })
+            </div>
+
+        </div>
+
+    </div>
+
+
+}
+
+@{
+    ViewBag.Title = "TablaCalculoNomina";
+}
+
+<h2>TablaCalculoNomina</h2>
+
+<p>
+    @Html.ActionLink("Agregar Nuevo Calculo de Nomina", "CalculoNomina")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Empleado de la nomina")
+        </th>
+
+        <th>
+            @Html.DisplayName("Año de Nomina")
+        </th>
+        <th>
+            @Html.DisplayName("Mes de Nomina")
+        </th>
+        <th>
+            @Html.DisplayName("Monto Total")
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Empleado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Año)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mes)
+            </td>
+            <th>
+                @Html.DisplayFor(modelItem => item.MontaTotal)
+
+            </th>
+
+        </tr>
+    }
+
+</table>
+
+@model IEnumerable<FinalCodeFirst.Models.Cargo>
+
+@{
+    ViewBag.Title = "TablaCargos";
+}
+
+<h2>TablaCargos</h2>
+
+<p>
+    @Html.ActionLink("Añadir un Cargo Nuevo", "Cargo")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.NombreCargo)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.NombreCargo)
+        </td>
+      
+    </tr>
+}
+
+</table>
+
+@model IEnumerable<FinalCodeFirst.Models.Departamento>
+
+@{
+    ViewBag.Title = "TablaDepartamento";
+}
+
+<h2>TablaDepartamento</h2>
+
+<p>
+    @Html.ActionLink("Agregar Nuevo Departamento", "Departamento")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CodigoDepartamento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NombreDepartamento)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CodigoDepartamento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NombreDepartamento)
+        </td>
+   
+    </tr>
+}
+
+</table>
+
+@{
+    ViewBag.Title = "TablaLicencia";
+}
+
+<h2>TablaCalculoNomina</h2>
+
+<p>
+    @Html.ActionLink("Registra la licencia de un empleado", "Licencia")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Empleado de la licencia")
+        </th>
+
+        <th>
+            @Html.DisplayName("Inicio de su Licencia")
+        </th>
+        <th>
+            @Html.DisplayName("Final de su Licencia")
+        </th>
+        <th>
+            @Html.DisplayName("Motivo de su Licencia")
+        </th>
+        <th>
+            @Html.DisplayName("Comentario de la Licencia")
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Empleado)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaInicio)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaFinal)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Comentario)
+
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Motivo)
+
+        </td>
+
+    </tr>
+    }
+
+</table>
+@{
+    ViewBag.Title = "TablaPermisos";
+}
+
+<h2>TablaCalculoNomina</h2>
+
+<p>
+    @Html.ActionLink("Registrar los Permisos", "Permisos")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Permiso del empleado")
+        </th>
+
+        <th>
+            @Html.DisplayName("Inicio de su Permiso")
+        </th>
+        <th>
+            @Html.DisplayName("Final de su Permiso")
+        </th>
+        <th>
+            @Html.DisplayName("Cometarios del Permiso")
+        </th>
+        
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Empleado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaInicio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaFinal)
+            </td>
+            <td
+                @Html.DisplayFor(modelItem => item.Comentarios)
+
+            </td>
+            
+        </tr>
+    }
+
+</table>
+@{
+    ViewBag.Title = "TablaSalidasEmpleados";
+}
+
+<h2>TablaCalculoNomina</h2>
+
+<p>
+    @Html.ActionLink("Inactiva o Almacenar Salisas del Empleado", "SalidasEmpleados")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Inicactividad o Salida del empleado")
+        </th>
+
+        <th>
+            @Html.DisplayName("Tipo de Salida")
+        </th>
+        <th>
+            @Html.DisplayName("Motivo del Empleado")
+        </th>
+        <th>
+            @Html.DisplayName("Fecha de Salida del empleado")
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Empleado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipoSalida)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Motivo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaSalida)
+
+            </td>
+
+        </tr>
+    }
+
+</table>
+@{
+    ViewBag.Title = "TablaVacaciones";
+}
+
+<h2>TablaCalculoNomina</h2>
+
+<p>
+    @Html.ActionLink("Registrar Las Vacaciones del Empleado", "Vacaciones")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Vacaciones del Empleado")
+        </th>
+
+        <th>
+            @Html.DisplayName("Inicio de sus Vacaciones")
+        </th>
+        <th>
+            @Html.DisplayName("Final de sus Vacaciones")
+        </th>
+        <th>
+            @Html.DisplayName("Cometarios de las Vaciones")
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Empleado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaInicio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaFinal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comentarios)
+
+            </td>
+
+        </tr>
+    }
+
+</table>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace FinalCodeFirst.Models
+{
+    public class Vacaciones
+    {
+        public int id { get; set; }
+        public String Empleado { get; set; }
+        public Nullable<System.DateTime> FechaInicio { get; set; }
+        public Nullable<System.DateTime> FechaFinal { get; set; }
+        public String Comentarios { get; set; }
+
+    }
+}
+@model FinalCodeFirst.Models.Vacaciones
+
+@{
+    /**/
+
+    ViewBag.Title = "Vacaciones";
+}
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Vacaciones</h4>
+        <br />
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <br />
+        <div class="form-group">
+            @Html.Label("Nombre de empleado", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Empleado, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Empleado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Tipos de Salidas", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FechaInicio, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FechaInicio, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Motivo de su Salida", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FechaFinal, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FechaFinal, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Comentario en la Licencia", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Comentarios, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Comentarios, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Eviar Informacion" class="btn btn-outline-success" />
+                <br />
+                @Html.ActionLink("Listas de Empleados en Vacaciones", "TablaVacaciones", "Procesos","Home",
+                new { @class = "btn btn-outline-success" })
+            </div>
+
+        </div>
+
+    </div>
+
+
+}
